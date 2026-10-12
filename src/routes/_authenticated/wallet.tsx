@@ -21,6 +21,7 @@ import {
 } from "@/lib/wallet.functions";
 import { formatMinor, toMinor, type Currency } from "@/lib/money";
 import { useMe } from "@/hooks/use-me";
+import type { Me } from "@/lib/auth.functions";
 import { ShieldCheck, Copy, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/_authenticated/wallet")({
@@ -83,7 +84,7 @@ function WalletPage() {
           ))}
         </div>
 
-        {(!verified || needsName) && <KycBanner verified={verified} />}
+        {(!verified || needsName) && <KycBanner verified={verified} me={me} />}
 
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <DepositSection verified={verified} />
@@ -126,11 +127,12 @@ function WalletPage() {
   );
 }
 
-function KycBanner({ verified }: { verified: boolean }) {
+function KycBanner({ verified, me }: { verified: boolean; me: Me | null }) {
   const qc = useQueryClient();
   const doKyc = useServerFn(startKyc);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [bvn, setBvn] = useState("");
   const [busy, setBusy] = useState(false);
 
   async function verify() {
@@ -139,9 +141,21 @@ function KycBanner({ verified }: { verified: boolean }) {
       toast.error("Enter your legal first and last name");
       return;
     }
+    const cleanBvn = bvn.trim();
+    if (cleanBvn && !/^\d{11}$/.test(cleanBvn)) {
+      toast.error("BVN must be 11 digits, or leave it blank");
+      return;
+    }
     setBusy(true);
     try {
-      const r = await doKyc({ data: { firstName: firstName.trim(), lastName: lastName.trim() } });
+      const r = await doKyc({
+        data: {
+          firstName: firstName.trim(),
+          lastName: lastName.trim(),
+          ...(cleanBvn ? { bvn: cleanBvn } : {}),
+        },
+      });
+      setBvn("");
       await qc.invalidateQueries({ queryKey: ["me"] });
       await qc.invalidateQueries({ queryKey: ["deposit-account"] });
       if (verified) toast.success("Legal name saved");
@@ -149,6 +163,8 @@ function KycBanner({ verified }: { verified: boolean }) {
       else
         toast.message("Verification in progress — we will update your account when it completes");
     } catch (e) {
+      // Names may have been saved even though the BVN check failed.
+      await qc.invalidateQueries({ queryKey: ["me"] }).catch(() => undefined);
       toast.error(errMsg(e, verified ? "Could not save your name" : "Verification failed"));
     } finally {
       setBusy(false);
@@ -187,6 +203,25 @@ function KycBanner({ verified }: { verified: boolean }) {
           {busy ? "Submitting…" : verified ? "Save name" : "Verify"}
         </Button>
       </div>
+      {me?.bvnVerified ? (
+        <p className="mt-2 text-xs text-muted-foreground">BVN ending {me.bvnLast4} verified</p>
+      ) : (
+        <div className="mt-2">
+          <input
+            placeholder="BVN (optional)"
+            aria-label="BVN (optional)"
+            inputMode="numeric"
+            autoComplete="off"
+            maxLength={11}
+            value={bvn}
+            onChange={(e) => setBvn(e.target.value.replace(/\D/g, "").slice(0, 11))}
+            className={`${inputCls} sm:max-w-xs`}
+          />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Used to confirm your identity with our banking partner. We only keep the last 4 digits.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

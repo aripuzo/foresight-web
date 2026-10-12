@@ -43,7 +43,7 @@ export type WithdrawalStatus =
 export type WithdrawalResult = { payoutId: string; currency: Currency; status: WithdrawalStatus };
 
 export const startKyc = createServerFn({ method: "POST" })
-  .validator((d: { firstName: string; lastName: string }) => d)
+  .validator((d: { firstName: string; lastName: string; bvn?: string }) => d)
   .handler(async ({ data }): Promise<KycResult> => {
     return await apiAuthed("/v1/kyc/start", { method: "POST", body: JSON.stringify(data) });
   });

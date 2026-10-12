@@ -18,6 +18,8 @@ export type Me = {
   phone: string | null;
   legalFirstName: string | null;
   legalLastName: string | null;
+  bvnLast4: string | null;
+  bvnVerified: boolean;
 };
 
 export const signup = createServerFn({ method: "POST" })
