@@ -164,8 +164,8 @@ function KycBanner({ verified, me }: { verified: boolean; me: Me | null }) {
         toast.message("Verification in progress — we will update your account when it completes");
     } catch (e) {
       // Names may have been saved even though the BVN check failed.
-      await qc.invalidateQueries({ queryKey: ["me"] }).catch(() => undefined);
       toast.error(errMsg(e, verified ? "Could not save your name" : "Verification failed"));
+      void qc.invalidateQueries({ queryKey: ["me"] }).catch(() => undefined);
     } finally {
       setBusy(false);
     }
@@ -212,12 +212,12 @@ function KycBanner({ verified, me }: { verified: boolean; me: Me | null }) {
             aria-label="BVN (optional)"
             inputMode="numeric"
             autoComplete="off"
-            maxLength={11}
+            aria-describedby="bvn-help"
             value={bvn}
             onChange={(e) => setBvn(e.target.value.replace(/\D/g, "").slice(0, 11))}
             className={`${inputCls} sm:max-w-xs`}
           />
-          <p className="mt-1 text-xs text-muted-foreground">
+          <p id="bvn-help" className="mt-1 text-xs text-muted-foreground">
             Used to confirm your identity with our banking partner. We only keep the last 4 digits.
           </p>
         </div>
