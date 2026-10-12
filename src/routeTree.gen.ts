@@ -9,41 +9,41 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as MarketSlugRouteImport } from './routes/market.$slug'
-import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedPortfolioRouteImport } from './routes/_authenticated/portfolio'
+import { Route as AuthenticatedWalletRouteImport } from './routes/_authenticated/wallet'
+import { Route as MarketSlugRouteImport } from './routes/market.$slug'
 
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketSlugRoute = MarketSlugRouteImport.update({
-  id: '/market/$slug',
-  path: '/market/$slug',
-  getParentRoute: () => rootRouteImport,
+const AuthenticatedPortfolioRoute = AuthenticatedPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedWalletRoute = AuthenticatedWalletRouteImport.update({
   id: '/wallet',
   path: '/wallet',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedPortfolioRoute = AuthenticatedPortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => AuthenticatedRouteRoute,
+const MarketSlugRoute = MarketSlugRouteImport.update({
+  id: '/market/$slug',
+  path: '/market/$slug',
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -93,11 +93,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated': {
@@ -107,19 +107,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/market/$slug': {
-      id: '/market/$slug'
-      path: '/market/$slug'
-      fullPath: '/market/$slug'
-      preLoaderRoute: typeof MarketSlugRouteImport
-      parentRoute: typeof rootRouteImport
+    '/_authenticated/portfolio': {
+      id: '/_authenticated/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof AuthenticatedPortfolioRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/wallet': {
       id: '/_authenticated/wallet'
@@ -128,12 +128,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWalletRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/portfolio': {
-      id: '/_authenticated/portfolio'
-      path: '/portfolio'
-      fullPath: '/portfolio'
-      preLoaderRoute: typeof AuthenticatedPortfolioRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+    '/market/$slug': {
+      id: '/market/$slug'
+      path: '/market/$slug'
+      fullPath: '/market/$slug'
+      preLoaderRoute: typeof MarketSlugRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
