@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { PasswordInput } from "@/components/password-input";
 import { login, signup } from "@/lib/auth.functions";
 import { closeAuthModal, openAuthModal, useAuthModal } from "@/lib/auth-modal";
 
@@ -56,7 +57,9 @@ export function AuthDialog() {
 
           <form onSubmit={submit} className="mt-6 space-y-3">
             <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Email</label>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Email
+              </label>
               <input
                 type="email"
                 required
@@ -67,7 +70,9 @@ export function AuthDialog() {
             </div>
             {isSignup && (
               <div>
-                <label className="text-xs uppercase tracking-wider text-muted-foreground">Username</label>
+                <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Username
+                </label>
                 <input
                   type="text"
                   required
@@ -81,14 +86,15 @@ export function AuthDialog() {
               </div>
             )}
             <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Password</label>
-              <input
-                type="password"
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Password
+              </label>
+              <PasswordInput
                 required
                 minLength={8}
+                autoComplete={isSignup ? "new-password" : "current-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 h-10 w-full rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-primary/60"
               />
             </div>
             <Button type="submit" disabled={loading} className="h-11 w-full font-semibold">

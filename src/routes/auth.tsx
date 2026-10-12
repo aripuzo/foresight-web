@@ -7,6 +7,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { login, signup } from "@/lib/auth.functions";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
+import { PasswordInput } from "@/components/password-input";
 import { TrendingUp } from "lucide-react";
 
 const searchSchema = z.object({
@@ -67,7 +68,9 @@ function AuthPage() {
         <div className="mt-8 rounded-xl border border-border bg-card p-5">
           <form onSubmit={submit} className="space-y-3">
             <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Email</label>
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Email
+              </label>
               <input
                 type="email"
                 required
@@ -78,7 +81,9 @@ function AuthPage() {
             </div>
             {isSignup && (
               <div>
-                <label className="text-xs uppercase tracking-wider text-muted-foreground">Username</label>
+                <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                  Username
+                </label>
                 <input
                   type="text"
                   required
@@ -92,14 +97,15 @@ function AuthPage() {
               </div>
             )}
             <div>
-              <label className="text-xs uppercase tracking-wider text-muted-foreground">Password</label>
-              <input
-                type="password"
+              <label className="text-xs uppercase tracking-wider text-muted-foreground">
+                Password
+              </label>
+              <PasswordInput
                 required
                 minLength={8}
+                autoComplete={isSignup ? "new-password" : "current-password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 h-10 w-full rounded-md border border-border bg-surface px-3 text-sm outline-none focus:border-primary/60"
               />
             </div>
             <Button type="submit" disabled={loading} className="h-11 w-full font-semibold">
