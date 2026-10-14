@@ -8,7 +8,7 @@ import { login, signup } from "@/lib/auth.functions";
 import { Button } from "@/components/ui/button";
 import { Header } from "@/components/header";
 import { PasswordInput } from "@/components/password-input";
-import { TrendingUp } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 
 const searchSchema = z.object({
   mode: z.enum(["signin", "signup"]).optional(),
@@ -55,9 +55,7 @@ function AuthPage() {
     <div className="min-h-screen">
       <Header />
       <main className="mx-auto flex max-w-md flex-col px-4 py-16">
-        <div className="grid h-12 w-12 place-items-center self-center rounded-xl bg-primary text-primary-foreground">
-          <TrendingUp className="h-6 w-6" />
-        </div>
+        <BrandLogo variant="mark" className="self-center" />
         <h1 className="mt-6 text-center text-2xl font-bold tracking-tight">
           {isSignup ? "Create your account" : "Welcome back"}
         </h1>

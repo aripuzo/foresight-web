@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
-import { TrendingUp } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
@@ -45,9 +45,7 @@ export function AuthDialog() {
     <Dialog open={open} onOpenChange={(v) => !v && closeAuthModal()}>
       <DialogContent className="max-w-md border-border bg-card p-6 sm:p-8">
         <div className="flex flex-col">
-          <div className="grid h-12 w-12 place-items-center self-center rounded-xl bg-primary text-primary-foreground">
-            <TrendingUp className="h-6 w-6" />
-          </div>
+          <BrandLogo variant="mark" className="self-center" />
           <h2 className="mt-4 text-center text-2xl font-bold tracking-tight">
             {isSignup ? "Create your account" : "Welcome back"}
           </h2>

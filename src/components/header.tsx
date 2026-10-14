@@ -5,7 +5,8 @@ import { useMe } from "@/hooks/use-me";
 import { logout } from "@/lib/auth.functions";
 import { getWallets } from "@/lib/markets.functions";
 import { formatMinor } from "@/lib/money";
-import { TrendingUp, Wallet, Search, LogOut } from "lucide-react";
+import { Wallet, Search, LogOut } from "lucide-react";
+import { BrandLogo } from "@/components/brand-logo";
 import { openAuthModal } from "@/lib/auth-modal";
 import {
   DropdownMenu,
@@ -38,11 +39,8 @@ export function Header() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/85 backdrop-blur-md">
       <div className="mx-auto flex h-14 max-w-[1400px] items-center gap-6 px-4">
-        <Link to="/" className="flex items-center gap-2 font-bold tracking-tight">
-          <div className="grid h-7 w-7 place-items-center rounded-md bg-primary text-primary-foreground">
-            <TrendingUp className="h-4 w-4" />
-          </div>
-          <span className="text-lg">Foresight</span>
+        <Link to="/" aria-label="Foresight home" className="flex shrink-0 items-center">
+          <BrandLogo />
         </Link>
 
         <div className="relative hidden max-w-md flex-1 md:block">

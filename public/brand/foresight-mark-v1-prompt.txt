@@ -1,0 +1,8 @@
+Edited using the built-in image generation tool.
+
+Use case: background-extraction
+Edit target: the provided Foresight logo image.
+Primary request: Extract ONLY the standalone abstract blue F emblem at the far left of the image. Remove the entire "Foresight" wordmark on the right, including the text's capital F. Keep the existing far-left emblem exactly: its three blue curved tapered pieces, their geometry, relative positioning, proportions, negative spaces, color and orientation. Do not redesign, reinterpret, embellish or add any shapes.
+Composition: center this single extracted emblem on a square transparent canvas with a modest even clear margin. Enlarge the unchanged emblem to fill most of the square.
+Background: preserve real alpha transparency, including all gaps inside the emblem.
+Constraints: one symbol only, no lettering, no caption, no background, no shadows, no border.

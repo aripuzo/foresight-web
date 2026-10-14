@@ -1,0 +1,11 @@
+Generated using the built-in image generation tool.
+
+Use case: logo-brand
+Asset type: primary brand logo for Foresight, a prediction market platform for African markets.
+Primary request: Create one polished, distinctive horizontal logo: a compact abstract F symbol on the left and the exact word "Foresight" on the right. The mark should express foresight, a clear horizon and forward movement through strong simple geometric negative space, with a subtle rising directional gesture. Make it elegant and visually balanced, recognizable at app-icon size.
+Style/medium: precise flat vector-like graphic design, confident modern financial technology identity, minimal forms and crisp edges. Clean carefully kerned sans-serif wordmark, capital F and lowercase remaining letters.
+Color palette: use a single vivid medium blue drawn from the app's primary blue (approximately #3986E8) for both mark and lettering, so the logo is legible against light or deep navy backgrounds.
+Composition: one centered horizontal mark-plus-wordmark lockup, mark about the height of the lettering, generous clear space around the logo, logo fills most of a wide canvas.
+Text (verbatim): "Foresight"
+Scene/backdrop: truly transparent alpha background.
+Constraints: one final logo only, no presentation board, no duplicate variants, no tagline, no explanatory text. No gradients, shadows, 3D, mockups, texture, outlines around the entire logo, currency symbols, continent silhouettes or stock eye icons. Keep the mark simple enough to reproduce in one ink.
