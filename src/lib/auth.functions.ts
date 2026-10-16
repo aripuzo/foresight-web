@@ -22,8 +22,21 @@ export type Me = {
   bvnVerified: boolean;
 };
 
+export const requestSignupCode = createServerFn({ method: "POST" })
+  .validator((d: { email: string }) => d)
+  .handler(async ({ data }) => {
+    const res = await apiPublic("/v1/auth/signup-verification", {
+      method: "POST",
+      body: JSON.stringify(data),
+    });
+    return res as { challengeId: string; expiresAt: string; resendAfterSeconds: number };
+  });
+
 export const signup = createServerFn({ method: "POST" })
-  .validator((d: { email: string; username: string; password: string }) => d)
+  .validator(
+    (d: { email: string; username: string; password: string; challengeId: string; code: string }) =>
+      d,
+  )
   .handler(async ({ data }) => {
     const res = await apiPublic("/v1/auth/register", {
       method: "POST",
