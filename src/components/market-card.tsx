@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import type { Market } from "@/lib/markets.functions";
-import { formatMinor } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 
 export function MarketCard({ market }: { market: Market }) {
   const yesPct = Math.round(market.yesPrice * 100);
-  const noPct = 100 - yesPct;
   return (
     <Link
       to="/market/$slug"
@@ -39,15 +38,15 @@ export function MarketCard({ market }: { market: Market }) {
 
       <div className="mt-2 grid grid-cols-2 gap-2">
         <div className="rounded-md bg-yes-muted px-3 py-1.5 text-center text-xs font-semibold text-yes">
-          Yes {yesPct}¢
+          Yes <Money major={market.yesPrice} currency={market.currency} />
         </div>
         <div className="rounded-md bg-no-muted px-3 py-1.5 text-center text-xs font-semibold text-no">
-          No {noPct}¢
+          No <Money major={1 - market.yesPrice} currency={market.currency} />
         </div>
       </div>
 
       <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
-        <span>{formatMinor(market.volumeMinor, market.currency)} Vol.</span>
+        <span><Money minor={market.volumeMinor} currency={market.currency} /> Vol.</span>
         {market.categoryName && (
           <span className="rounded bg-surface px-1.5 py-0.5">{market.categoryName}</span>
         )}

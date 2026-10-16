@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMe } from "@/hooks/use-me";
 import { logout } from "@/lib/auth.functions";
 import { getWallets } from "@/lib/markets.functions";
-import { formatMinor } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 import { Wallet, Search, LogOut } from "lucide-react";
 import { BrandLogo } from "@/components/brand-logo";
 import { openAuthModal } from "@/lib/auth-modal";
@@ -72,7 +72,7 @@ export function Header() {
               >
                 <Wallet className="h-3.5 w-3.5 text-primary" />
                 <span className="tabular-nums">
-                  {ngn ? formatMinor(ngn.balanceMinor, "NGN") : "₦0.00"}
+                  <Money minor={ngn?.balanceMinor ?? "0"} currency="NGN" />
                 </span>
               </Link>
               <DropdownMenu>

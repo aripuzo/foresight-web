@@ -1,14 +1,15 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import { toast } from "sonner";
 import { Header } from "@/components/header";
 import {
   getMarket, getQuote, getWallets, getPortfolio, placeTrade,
 } from "@/lib/markets.functions";
 import { useMe } from "@/hooks/use-me";
-import { formatMinor, toMinor, currencySymbol, type Currency } from "@/lib/money";
+import { toMinor, currencySymbol, type Currency } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, TrendingUp } from "lucide-react";
 
@@ -92,7 +93,6 @@ function MarketDetail() {
   }
 
   const yesPct = Math.round(m.yesPrice * 100);
-  const noPct = 100 - yesPct;
   const quote = quoteQ.data;
   const walletBalance = walletsQ.data?.find((w) => w.currency === currency)?.balanceMinor;
 
@@ -149,7 +149,7 @@ function MarketDetail() {
               )}
               <h1 className="mt-1 text-2xl font-bold leading-tight md:text-3xl">{m.title}</h1>
               <div className="mt-2 flex flex-wrap items-center gap-4 text-xs text-muted-foreground">
-                <span>{formatMinor(m.volumeMinor, currency)} Volume</span>
+                <span><Money minor={m.volumeMinor} currency={currency} /> Volume</span>
                 <span className="rounded bg-surface px-2 py-0.5 font-medium">{currency}</span>
                 {m.closeTime && (
                   <span>Resolves {new Date(m.closeTime).toLocaleDateString()}</span>
@@ -160,7 +160,7 @@ function MarketDetail() {
           </div>
 
           <div className="mt-6 rounded-xl border border-border bg-card p-6">
-            <div className="flex items-end justify-between">
+            <div className="flex flex-wrap items-end justify-between gap-4">
               <div>
                 <div className="text-sm text-muted-foreground">Current probability</div>
                 <div className="mt-1 flex items-baseline gap-2">
@@ -173,10 +173,10 @@ function MarketDetail() {
               </div>
               <div className="grid grid-cols-2 gap-2 text-center text-sm">
                 <div className="rounded-md bg-yes-muted px-4 py-2 font-semibold text-yes">
-                  Yes {yesPct}¢
+                  Yes <Money major={m.yesPrice} currency={currency} />
                 </div>
                 <div className="rounded-md bg-no-muted px-4 py-2 font-semibold text-no">
-                  No {noPct}¢
+                  No <Money major={1 - m.yesPrice} currency={currency} />
                 </div>
               </div>
             </div>
@@ -227,7 +227,7 @@ function MarketDetail() {
                     : "bg-yes-muted text-yes hover:opacity-90")
                 }
               >
-                Yes {yesPct}¢
+                Yes <Money major={m.yesPrice} currency={currency} />
               </button>
               <button
                 onClick={() => setOutcome("no")}
@@ -238,7 +238,7 @@ function MarketDetail() {
                     : "bg-no-muted text-no hover:opacity-90")
                 }
               >
-                No {noPct}¢
+                No <Money major={1 - m.yesPrice} currency={currency} />
               </button>
             </div>
 
@@ -290,11 +290,11 @@ function MarketDetail() {
               <Row label="Shares" value={quote ? quote.shares.toFixed(2) : "—"} />
               <Row
                 label="Fee"
-                value={quote ? formatMinor(quote.feeMinor, currency) : "—"}
+                value={quote ? <Money minor={quote.feeMinor} currency={currency} /> : "—"}
               />
               <Row
                 label={side === "buy" ? "You pay" : "You receive"}
-                value={quote ? formatMinor(quote.totalMinor, currency) : "—"}
+                value={quote ? <Money minor={quote.totalMinor} currency={currency} /> : "—"}
                 highlight
               />
             </div>
@@ -316,7 +316,7 @@ function MarketDetail() {
               <div className="mt-3 text-center text-xs text-muted-foreground">
                 Balance:{" "}
                 <span className="tabular-nums text-foreground">
-                  {formatMinor(walletBalance, currency)}
+                  <Money minor={walletBalance} currency={currency} />
                 </span>
               </div>
             )}
@@ -327,7 +327,7 @@ function MarketDetail() {
   );
 }
 
-function Row({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
+function Row({ label, value, highlight }: { label: string; value: ReactNode; highlight?: boolean }) {
   return (
     <div className="flex items-center justify-between">
       <span className="text-muted-foreground">{label}</span>

@@ -19,7 +19,8 @@ import {
   getTransactions,
   type WithdrawalStatus,
 } from "@/lib/wallet.functions";
-import { formatMinor, toMinor, type Currency } from "@/lib/money";
+import { toMinor, type Currency } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 import { useMe } from "@/hooks/use-me";
 import type { Me } from "@/lib/auth.functions";
 import { ShieldCheck, Copy, Trash2 } from "lucide-react";
@@ -78,7 +79,7 @@ function WalletPage() {
                 {w.currency}
               </div>
               <div className="mt-1 text-2xl font-bold tabular-nums">
-                {formatMinor(w.balanceMinor, w.currency)}
+                <Money minor={w.balanceMinor} currency={w.currency} />
               </div>
             </div>
           ))}
@@ -113,7 +114,7 @@ function WalletPage() {
                         className={"p-3 text-right tabular-nums " + (neg ? "text-no" : "text-yes")}
                       >
                         {neg ? "−" : "+"}
-                        {formatMinor(abs, t.currency as Currency)}
+                        <Money minor={abs} currency={t.currency as Currency} />
                       </td>
                     </tr>
                   );

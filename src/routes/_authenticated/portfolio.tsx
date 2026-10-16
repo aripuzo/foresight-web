@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Header } from "@/components/header";
 import { getPortfolio, getWallets, type PortfolioPosition } from "@/lib/markets.functions";
-import { formatMinor, formatMajor, priceCents, type Currency } from "@/lib/money";
+import type { Currency } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 import { Wallet } from "lucide-react";
 import { useMe } from "@/hooks/use-me";
 
@@ -60,12 +61,12 @@ function Portfolio() {
                   {w.currency}
                 </div>
                 <div className="mt-1 text-xl font-bold tabular-nums">
-                  {formatMajor(cash + agg.value, w.currency)}
+                  <Money major={cash + agg.value} currency={w.currency} />
                 </div>
                 <div className="mt-1 flex justify-between text-xs text-muted-foreground">
-                  <span>Cash {formatMinor(w.balanceMinor, w.currency)}</span>
+                  <span>Cash <Money minor={w.balanceMinor} currency={w.currency} /></span>
                   <span className={agg.pnl >= 0 ? "text-yes" : "text-no"}>
-                    {agg.pnl >= 0 ? "+" : ""}{formatMajor(agg.pnl, w.currency)}
+                    {agg.pnl >= 0 ? "+" : ""}<Money major={agg.pnl} currency={w.currency} />
                   </span>
                 </div>
               </div>
@@ -125,13 +126,13 @@ function Portfolio() {
                         </span>
                       </td>
                       <td className="p-3 text-right tabular-nums">{p.shares.toFixed(2)}</td>
-                      <td className="p-3 text-right tabular-nums">{priceCents(p.avgPrice)}</td>
-                      <td className="p-3 text-right tabular-nums">{priceCents(p.currentPrice)}</td>
-                      <td className="p-3 text-right tabular-nums">{formatMajor(value, p.currency)}</td>
+                      <td className="p-3 text-right tabular-nums"><Money major={p.avgPrice} currency={p.currency} /></td>
+                      <td className="p-3 text-right tabular-nums"><Money major={p.currentPrice} currency={p.currency} /></td>
+                      <td className="p-3 text-right tabular-nums"><Money major={value} currency={p.currency} /></td>
                       <td
                         className={"p-3 text-right tabular-nums " + (pnl >= 0 ? "text-yes" : "text-no")}
                       >
-                        {pnl >= 0 ? "+" : ""}{formatMajor(pnl, p.currency)}
+                        {pnl >= 0 ? "+" : ""}<Money major={pnl} currency={p.currency} />
                       </td>
                     </tr>
                   );

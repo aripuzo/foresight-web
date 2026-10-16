@@ -28,5 +28,3 @@ export function formatMajor(major: number, c: Currency): string {
 }
 
 export const currencySymbol = (c: Currency): string => (c === "NGN" ? "₦" : c);
-
-export const priceCents = (p: number): string => `${(p * 100).toFixed(0)}¢`;

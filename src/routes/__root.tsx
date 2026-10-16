@@ -19,6 +19,7 @@ import { Analytics } from "@vercel/analytics/react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { LocalCurrencyProvider } from "@/components/local-currency";
 import { AuthDialog } from "@/components/auth-dialog";
 import { BrandLogo } from "@/components/brand-logo";
 
@@ -132,9 +133,11 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
-      <AuthDialog />
-      <Toaster />
+      <LocalCurrencyProvider>
+        <Outlet />
+        <AuthDialog />
+        <Toaster />
+      </LocalCurrencyProvider>
     </QueryClientProvider>
   );
 }

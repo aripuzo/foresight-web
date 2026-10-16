@@ -5,7 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { Bookmark, CalendarClock, ChevronLeft, ChevronRight, TrendingUp } from "lucide-react";
 import type { Market } from "@/lib/markets.functions";
-import { formatMinor } from "@/lib/money";
+import { Money } from "@/components/local-currency";
 import { useMe } from "@/hooks/use-me";
 import { openAuthModal } from "@/lib/auth-modal";
 
@@ -212,7 +212,7 @@ export function FeaturedSlider({ markets }: { markets: Market[] }) {
                           Volume
                         </div>
                         <div className="font-mono text-sm tabular-nums text-foreground">
-                          {formatMinor(market.volumeMinor, market.currency)}
+                          <Money minor={market.volumeMinor} currency={market.currency} />
                         </div>
                       </div>
                     </div>
