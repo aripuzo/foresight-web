@@ -251,8 +251,8 @@ function DepositSection({ verified }: { verified: boolean }) {
     setBusy(true);
     try {
       const res = await doDeposit({ data: { amountMinor: toMinor(num, "NGN") } });
-      if (res.checkoutUrl) window.open(res.checkoutUrl, "_blank", "noopener");
-      toast.success("Deposit started — complete it in the checkout tab");
+      if (!res.checkoutUrl) throw new Error("Checkout is unavailable. Please try again or use bank transfer.");
+      window.location.assign(res.checkoutUrl);
     } catch (e) {
       toast.error(errMsg(e, "Deposit failed"));
     } finally {
@@ -303,7 +303,7 @@ function DepositSection({ verified }: { verified: boolean }) {
 
         <div>
           <div className="text-xs font-medium uppercase tracking-wider text-muted-foreground">
-            Card or checkout
+            Online checkout
           </div>
           <div className="mt-2 flex items-center rounded-md border border-border bg-surface px-3">
             <span className="text-muted-foreground">₦</span>
