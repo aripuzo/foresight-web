@@ -365,6 +365,7 @@ function WithdrawSection({ verified, onDone }: { verified: boolean; onDone: () =
   }
 
   const accounts = accountsQ.data ?? [];
+  const hasBanks = (banksQ.data?.length ?? 0) > 0;
   const chosen = accounts.some((a) => a.id === selected) ? selected : (accounts[0]?.id ?? "");
 
   async function resolve() {
@@ -484,20 +485,38 @@ function WithdrawSection({ verified, onDone }: { verified: boolean; onDone: () =
         {adding || accounts.length === 0 ? (
           <div className="space-y-2 rounded-md border border-dashed border-border p-3">
             <select
+              aria-label="Choose your bank"
               value={bankCode}
+              disabled={!hasBanks}
               onChange={(e) => {
                 setBankCode(e.target.value);
                 setResolvedName(null);
               }}
               className="h-10 w-full rounded-md border border-border bg-surface px-2 text-sm"
             >
-              <option value="">{banksQ.isLoading ? "Loading banks…" : "Choose your bank"}</option>
+              <option value="">
+                {banksQ.isLoading ? "Loading banks…" : hasBanks ? "Choose your bank" : "Banks unavailable"}
+              </option>
               {(banksQ.data ?? []).map((b) => (
                 <option key={b.code} value={b.code}>
                   {b.name}
                 </option>
               ))}
             </select>
+            {!banksQ.isLoading && !hasBanks && (
+              <div role="alert" className="flex items-center justify-between gap-3 text-sm">
+                <p className="text-no">Could not load banks. Please try again.</p>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={banksQ.isFetching}
+                  onClick={() => banksQ.refetch()}
+                >
+                  {banksQ.isFetching ? "Loading…" : "Retry"}
+                </Button>
+              </div>
+            )}
             <input
               placeholder="10-digit account number"
               inputMode="numeric"
@@ -518,7 +537,12 @@ function WithdrawSection({ verified, onDone }: { verified: boolean; onDone: () =
                 </Button>
               </>
             ) : (
-              <Button onClick={resolve} variant="outline" className="h-10 w-full">
+              <Button
+                onClick={resolve}
+                disabled={!hasBanks || !bankCode || accountNumber.length !== 10}
+                variant="outline"
+                className="h-10 w-full"
+              >
                 Verify account
               </Button>
             )}
