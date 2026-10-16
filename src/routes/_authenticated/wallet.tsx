@@ -55,8 +55,13 @@ function WalletPage() {
   const walletsQ = useQuery({
     queryKey: ["wallets", me?.id ?? "anon"],
     queryFn: () => fetchWallets(),
+    refetchInterval: 10_000,
   });
-  const txQ = useQuery({ queryKey: ["transactions", me?.id ?? "anon"], queryFn: () => fetchTx() });
+  const txQ = useQuery({
+    queryKey: ["transactions", me?.id ?? "anon"],
+    queryFn: () => fetchTx(),
+    refetchInterval: 10_000,
+  });
   const verified = me?.kycTier === "verified";
   // Legacy verified users may have no legal name on file; the backend lets them add it once.
   const needsName = !!me && (!me.legalFirstName || !me.legalLastName);
